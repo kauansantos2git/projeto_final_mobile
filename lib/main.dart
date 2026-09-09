@@ -68,6 +68,31 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
+class AppInfo{
+  final String nome;
+  final String descricao;
+  final IconData icone;
+
+  const AppInfo({
+    required this.nome,
+    required this.descricao,
+    required this.icone,
+  });
+}
+
+final List<AppInfo> meusApps=[
+  AppInfo(
+    nome: 'MedLink', 
+    descricao: 'Gerenciamento de agendamentos e filas dentro de clínicas', 
+    icone: Icons.health_and_safety,
+  ),
+  AppInfo(
+    nome: 'Calculadora de Gasolina', 
+    descricao: 'Calcula litros e custo de uma viagem', 
+    icone: Icons.local_gas_station, 
+  )
+];
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -75,10 +100,86 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("MedLink"),
+        title: const Text("Central de Apps"),
       ),
-      body: const Center(
-        child: Text('Em construção...'),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              child: const Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Central de Apps',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Início'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Perfil'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Sair'),
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      ),
+      body: GridView.builder(
+        padding: EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 0.95,
+        ),
+        itemCount: meusApps.length,
+        itemBuilder: (context, indice){
+          final app = meusApps[indice];
+          return Card(
+            child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    app.icone,
+                    size: 36,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    app.nome,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    app.descricao,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
